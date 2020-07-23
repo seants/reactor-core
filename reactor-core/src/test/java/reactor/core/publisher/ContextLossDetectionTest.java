@@ -45,32 +45,43 @@ public class ContextLossDetectionTest {
 
 	public static List<SourceFactory> sources() {
 		return Arrays.asList(
-				new SourceFactory("Flux#transform") {
+//				new SourceFactory("Flux#transform") {
+//					@Override
+//					public CorePublisher<Context> apply(Function<CorePublisher<ContextView>, Publisher<Context>> f) {
+//						return Flux.deferWithContext(Flux::just).transform(f);
+//					}
+//				},
+//				new SourceFactory("Flux#transformDeferred") {
+//					@Override
+//					public CorePublisher<Context> apply(Function<CorePublisher<ContextView>, Publisher<Context>> f) {
+//						return Flux.deferWithContext(Flux::just).transformDeferred(f);
+//					}
+//				},
+				new SourceFactory("Flux#transformDeferred(BiFunction)") {
 					@Override
 					public CorePublisher<Context> apply(Function<CorePublisher<ContextView>, Publisher<Context>> f) {
-						return Flux.deferWithContext(Flux::just).transform(f);
-					}
-				},
-				new SourceFactory("Flux#transformDeferred") {
-					@Override
-					public CorePublisher<Context> apply(Function<CorePublisher<ContextView>, Publisher<Context>> f) {
-						return Flux.deferWithContext(Flux::just).transformDeferred(f);
+						return Flux.empty().transformDeferred((ctx, empty) -> f.apply(Flux.just(ctx)));
 					}
 				},
 
-				new SourceFactory("Mono#transform") {
+//				new SourceFactory("Mono#transform") {
+//					@Override
+//					public CorePublisher<Context> apply(Function<CorePublisher<ContextView>, Publisher<Context>> f) {
+//						return Mono.deferWithContext(Mono::just).transform(f);
+//					}
+//				},
+//				new SourceFactory("Mono#transformDeferred") {
+//					@Override
+//					public CorePublisher<Context> apply(Function<CorePublisher<ContextView>, Publisher<Context>> f) {
+//						return Mono.deferWithContext(Mono::just).transformDeferred(f);
+//					}
+//				},
+				new SourceFactory("Mono#transformDeferred(BiFunction)") {
 					@Override
 					public CorePublisher<Context> apply(Function<CorePublisher<ContextView>, Publisher<Context>> f) {
-						return Mono.deferWithContext(Mono::just).transform(f);
-					}
-				},
-				new SourceFactory("Mono#transformDeferred") {
-					@Override
-					public CorePublisher<Context> apply(Function<CorePublisher<ContextView>, Publisher<Context>> f) {
-						return Mono.deferWithContext(Mono::just).transformDeferred(f);
+						return Mono.empty().transformDeferred((ctx, empty) -> f.apply(Mono.just(ctx)));
 					}
 				}
-				//TODO test transformWithContext?
 		);
 	}
 

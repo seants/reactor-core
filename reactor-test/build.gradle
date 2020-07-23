@@ -39,7 +39,9 @@ ext {
 dependencies {
 	api project(":reactor-core")
 
-	implementation "org.jetbrains.kotlin:kotlin-stdlib:${kotlinVersion}"
+	// Not putting kotlin-stdlib as implementation to not force it as a transitive lib
+	compileOnly "org.jetbrains.kotlin:kotlin-stdlib:${kotlinVersion}"
+	testImplementation "org.jetbrains.kotlin:kotlin-stdlib:${kotlinVersion}"
 
 	testImplementation "junit:junit:$jUnitVersion"
 
